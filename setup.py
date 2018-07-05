@@ -29,8 +29,8 @@ ez_setup.use_setuptools()
 from setuptools import setup, find_packages
 
 setup(
-    name='js2model',
-    version='0.3.dev11',
+    name='amp-js2model',
+    version='0.4.0',
     packages=find_packages(),
     package_data={'tr.js2model': [
         'templates_py/*.mako',
