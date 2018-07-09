@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright (c) 2015 Thomson Reuters
 #
@@ -20,35 +20,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import ez_setup
-
 __author__ = 'Kevin Zimmerman'
-
-ez_setup.use_setuptools()
 
 from setuptools import setup, find_packages
 
 setup(
     name='amp-js2model',
-    version='0.4.0',
-    packages=find_packages(),
-    package_data={'tr.js2model': [
-        'templates_py/*.mako',
-        'templates_objc/*.mako',
-        'templates_objc/dependencies/*.h',
-        'templates_objc/dependencies/*.c',
-        'templates_objc/dependencies/*.m',
-        'templates_objc/static/*.*',
-        'templates_cpp/*.mako',
-        'templates_cpp/dependencies/*.h',
-        'templates_cpp/rapidjson/*.h',
-        'templates_cpp/rapidjson/error/*.h',
-        'templates_cpp/rapidjson/internal/*.h',
-        'templates_cpp/rapidjson/msinttypes/*.h',
-        'templates_cpp/static/*.*',
-    ]},
+    version='0.4.1',
+    packages=find_packages('src'),
+    package_dir={'':'src'},
+#    package_data={'': ['*.mako',
+#        'templates_py/*.mako',
+#        'templates_objc/*.mako',
+#        'templates_objc/dependencies/*.h',
+#        'templates_objc/dependencies/*.c',
+#        'templates_objc/dependencies/*.m',
+#        'templates_objc/static/*.*',
+#        'templates_cpp/*.mako',
+#        'templates_cpp/dependencies/*.h',
+#        'templates_cpp/rapidjson/*.h',
+#        'templates_cpp/rapidjson/error/*.h',
+#        'templates_cpp/rapidjson/internal/*.h',
+#        'templates_cpp/rapidjson/msinttypes/*.h',
+#        'templates_cpp/static/*.*',
+#    ]},
     include_package_data=True,
-    scripts=['ez_setup.py'],
     keywords=['json',
               'schema',
               'js2model',
