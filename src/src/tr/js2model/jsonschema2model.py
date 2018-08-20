@@ -213,6 +213,11 @@ class VariableDef(object):
         else:
             return self.schema_type
 
+    def __lt__(self, other):
+        if( self.type == other.type):
+            return self.name < other.name
+        else:
+            return self.type < other.type
 
 def whitespace_to_camel_case(matched):
     if matched.lastindex == 1:
@@ -353,7 +358,7 @@ class JsonSchema2Model(object):
         conventions = self.template_manager.get_conventions(self.lang)
 
         for classDef in self.models.values():
-
+            classDef.variable_defs.sort()
             if template_files.header_template:
                 self.render_model_to_file(classDef, classDef.header_file, template_files.header_template)
 
