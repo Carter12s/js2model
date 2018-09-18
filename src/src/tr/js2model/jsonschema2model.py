@@ -354,7 +354,7 @@ class JsonSchema2Model(object):
         for classDef in self.models.values():
             out += str(os.path.join(self.outdir, classDef.impl_file)) + ";" + str(os.path.join(self.outdir, classDef.header_file)) + ";"
         out = out[:-1]
-        print(out)
+        print(out, end="")
 
     def render_models(self):
         
