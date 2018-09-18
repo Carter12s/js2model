@@ -31,8 +31,8 @@ __author__ = 'kevin'
 @click.command('js2model')
 @click.pass_context
 @click.option('-l', '--lang', type=click.Choice(['objc', 'cpp', 'py']), default='objc', help='Target language. Supported values: objc, cpp, py (default: objc)')
-@click.option('--prefix', default='TR', help='prefix for class names (default: TR)')
-@click.option('--namespace', default='tr', help='parent namespace for generated code (default: tr)')
+@click.option('--prefix', default='', help='prefix for class names (default: TR)')
+@click.option('--namespace', default='', help='parent namespace for generated code (default: tr)')
 @click.option('--rootname', default=None, help='Class name for root schema object (default: base name of file)')
 @click.option('--validate/--no-validate', default=True, help='Run schema validation. Default=True')
 @click.option('--schema/--no-schema', 'generate_schema', default=False, help='Generate =JSON schema files. Assumes input files are regular JSON files. Default=False')
@@ -43,8 +43,9 @@ __author__ = 'kevin'
 @click.option('-v', '--verbose', is_flag=True, default=False, help='Print actions to STDOUT.')
 @click.option('--deserialize/--no-deserialize', default=True, help='Generate deserialization code. Implies --no-dependencies.. Default=True')
 @click.option('--dependencies/--no-dependencies', default=True, help='Include dependencies in output. Default=True')
+@click.option('--cmake/--no-cmake', default=False, help='In a dry run, print all files that would be generated')
 @click.argument('files', nargs=-1, type=click.Path(exists=True, dir_okay=False, resolve_path=True))
-def main(ctx: click.Context, lang, prefix, namespace, rootname, validate, generate_schema, output, implements, super_classes, import_files, verbose, deserialize, dependencies, files):
+def main(ctx: click.Context, lang, prefix, namespace, rootname, validate, generate_schema, output, implements, super_classes, import_files, verbose, deserialize, dependencies, cmake, files):
 
     """
      Generates JSON models for JSON Schema FILES
@@ -62,6 +63,7 @@ def main(ctx: click.Context, lang, prefix, namespace, rootname, validate, genera
     :param verbose:
     :param deserialize:
     :param dependencies:
+    :param cmake:
     :param files:
     :return:
     """
@@ -85,7 +87,7 @@ def main(ctx: click.Context, lang, prefix, namespace, rootname, validate, genera
                                  skip_deserialization=not deserialize,
                                  include_dependencies=dependencies)
 
-    generator.generate_models(files, generate_schema=generate_schema)
+    generator.generate_models(files, generate_schema=generate_schema, cmake=cmake)
 
     return 0
 
