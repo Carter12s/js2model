@@ -352,7 +352,7 @@ class JsonSchema2Model(object):
     def print_for_cmake(self):
         out = ""
         for classDef in self.models.values():
-            out += classDef.impl_file + ";" + classDef.header_file + ";"
+            out += str(os.path.join(self.outdir, classDef.impl_file)) + ";" + str(os.path.join(self.outdir, classDef.header_file)) + ";"
         out = out[:-1]
         print(out)
 
