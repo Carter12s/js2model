@@ -348,9 +348,16 @@ class JsonSchema2Model(object):
     def verbose_output(self, message):
         if self.verbose:
             print(message)
+            
+    def print_for_cmake(self):
+        out = ""
+        for classDef in self.models.values():
+            out += classDef.impl_file + ";" + classDef.header_file + ";"
+        out = out[:-1]
+        print(out)
 
     def render_models(self):
-
+        
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
 
@@ -772,7 +779,7 @@ class JsonSchema2Model(object):
 
         return src_file_name
 
-    def generate_models(self, files, generate_schema: bool = False):
+    def generate_models(self, files, generate_schema: bool = False, cmake: bool = False):
 
         loader = JmgLoader()
 
@@ -826,10 +833,11 @@ class JsonSchema2Model(object):
                     root_schema[JsonSchema2Model.SCHEMA_URI] = schema_file_path
 
                 self.create_model(root_schema, scope)
-
-        self.render_models()
-
-        self.copy_static_files()
-
-        if self.include_dependencies:
-            self.copy_dependencies()
+        
+        if not cmake:
+            self.render_models()
+            self.copy_static_files()
+            if self.include_dependencies:
+                self.copy_dependencies()
+        else:
+            self.print_for_cmake()
