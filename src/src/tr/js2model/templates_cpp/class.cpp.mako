@@ -60,7 +60,7 @@ ${class_name}::${class_name}(const rapidjson::Value &json_value) {
             assert(array_item->IsInt());
             ${inst_name}.push_back(array_item->GetInt());
             %elif v.schema_type == 'number':
-            assert(array_item->IsDouble());
+            assert(array_item->IsNumber());
             ${inst_name}.push_back(array_item->GetDouble());
             %elif v.schema_type == 'boolean':
             assert(array_item->IsBool());
@@ -91,7 +91,7 @@ ${class_name}::${class_name}(const rapidjson::Value &json_value) {
         }
         %elif v.schema_type == 'number':
         if (!${var_iter}->value.IsNull()) {
-            assert(${var_iter}->value.IsDouble());
+            assert(${var_iter}->value.IsNumber());
             ${inst_name} = ${var_iter}->value.GetDouble();
         }
         %elif v.schema_type == 'boolean':
