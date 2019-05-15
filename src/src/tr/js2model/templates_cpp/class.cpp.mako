@@ -123,26 +123,34 @@ ${class_name}::${class_name}(const rapidjson::Value &json_value) {
 string to_string(const ${class_name} &val, std::string indent/* = "" */, std::string pretty_print/* = "" */) {
 
     ostringstream os;
+    bool first = false;
 
     os << indent << "{" << endl;
-    % for v in classDef.variable_defs:
+    % for (index, v) in enumerate(classDef.variable_defs):
 <%
     inst_name = base.attr.inst_name(v.name)
+    not_last = index < len(classDef.variable_defs) - 1
 %>\
     %if v.isArray:
-    os << indent << pretty_print << "\"${v.name}\": [";
+    os << indent << pretty_print << "\"${inst_name}\": [";
+    first = true;
     for( auto &array_item : val.${inst_name} ) {
 
+        if(!first){
+          os << ",";
+        }
+        first = false;
+
         % if v.schema_type == 'string':
-        os << "\"" << array_item << "\",";
+        os << "\"" << array_item << "\"";
         %elif v.schema_type == 'integer':
-        os << array_item << ",";
+        os << array_item;
         %elif v.schema_type == 'number':
-        os << array_item << ",";
+        os << array_item;
         %elif v.schema_type == 'boolean':
-        os << (array_item ? "true" : "false") << ",";
+        os << (array_item ? "true" : "false");
         %elif v.schema_type == 'object':
-        os << endl << to_string(array_item, indent + pretty_print + pretty_print, pretty_print) << "," << endl;
+        os << endl << to_string(array_item, indent + pretty_print + pretty_print, pretty_print) << endl;
 ##        %elif v.schema_type == 'array':
 ##        ## TODO: probably need to recursively handle arrays of arrays
 ##        assert(array_item->IsArray());
@@ -150,18 +158,18 @@ string to_string(const ${class_name} &val, std::string indent/* = "" */, std::st
 ##        ${inst_name}.push_back(${v.type}(item_array));
         %endif
     }
-    os << indent << pretty_print << "]," << endl;
+    os << indent << pretty_print << "]" << ${"\",\"" if not_last else "\"\""} << endl;
     %else:
     % if v.schema_type == 'string':
-    os << indent << pretty_print << "\"${v.name}\": \"" << val.${inst_name} << "\"," << endl;
+    os << indent << pretty_print << "\"${inst_name}\": \"" << val.${inst_name} << "\"" << ${"\",\"" if not_last else "\"\""} << endl;
     %elif v.schema_type == 'integer':
-    os << indent << pretty_print << "\"${v.name}\": " << val.${inst_name} << "," << endl;
+    os << indent << pretty_print << "\"${inst_name}\": " << val.${inst_name} << ${"\",\"" if not_last else "\"\""} << endl;
     %elif v.schema_type == 'number':
-    os << indent << pretty_print << "\"${v.name}\": " << val.${inst_name} << "," << endl;
+    os << indent << pretty_print << "\"${inst_name}\": " << val.${inst_name} << ${"\",\"" if not_last else "\"\""} << endl;
     %elif v.schema_type == 'boolean':
-    os << indent << pretty_print << "\"${v.name}\": " << (val.${inst_name} ? "true" : "false") << "," << endl;
+    os << indent << pretty_print << "\"${inst_name}\": " << (val.${inst_name} ? "true" : "false") << ${"\",\"" if not_last else "\"\""} << endl;
     %elif v.schema_type == 'object':
-    os << indent << pretty_print << "\"${v.name}\": " << to_string(val.${inst_name}, indent + pretty_print, pretty_print) << "," << endl;
+    os << indent << pretty_print << "\"${inst_name}\": " << to_string(val.${inst_name}, indent + pretty_print, pretty_print) << ${"\",\"" if not_last else "\"\""} << endl;
     %endif
     %endif
     % endfor

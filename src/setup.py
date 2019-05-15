@@ -26,7 +26,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='amp-js2model',
-    version='0.5.0',
+    version='0.6.0',
     packages=find_packages('src'),
     package_dir={'':'src'},
 #    package_data={'': ['*.mako',
